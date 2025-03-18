@@ -251,6 +251,7 @@ public class Servico {
                 // Calcular a taxa de levantamento
                 double taxa = 0; // cria a variavel taxa
 
+                // verifica se o saldo e menor que o valor
                 if (valor <= 100) {
                     taxa = 3;
                 } else if (valor <= 1000) {
@@ -261,16 +262,24 @@ public class Servico {
                     taxa = 50;
                 }
 
-                double saldoAtual = getSaldo(); //
+                // retorna o saldo actual do getSaldo, da base de dados
+                double saldoAtual = getSaldo(); 
+                
+                // verifica se o saldo é suficiente para fazer o levantamento, se o saldo e maior que o valor a levantar, mais a taxa de acordo com o valor
                 if (saldoAtual < valor + taxa) {
                     JOptionPane.showMessageDialog(null, "Saldo insuficiente! Seu saldo é de " + saldoAtual + " MZN.", "Erro", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                // Atualizar o saldo
+                // Calculo para actualizar o saldo
                 double novoSaldo = saldoAtual - (valor + taxa);
+                // atualiza o saldo na base de dados
                 Saldonov(novoSaldo);
+
+                // registra o movimento do levantamento na na base de dados
                 registrarMovimento("Levantamento", novoSaldo);
+                
+                // confirmacao
                 JOptionPane.showMessageDialog(null, "Levantamento realizado com sucesso! \nTaxa: " + taxa + " MZN. \nSaldo restante: " + novoSaldo + " MZN.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 
             } catch (NumberFormatException e) {
